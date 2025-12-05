@@ -62,7 +62,7 @@ async function run() {
       const result = await freelanceMarketplace.find(query).toArray();
       res.send(result);
     })
-
+// update jobs
     app.put('/update/:id', async (req, res) => {
       const data = req.body;
       delete data._id;
@@ -78,6 +78,16 @@ async function run() {
       res.send(result);
       console.error("Update error:", err);
     })
+
+    app.delete('/delete/:id', async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const result = await freelanceMarketplace.deleteOne(query);
+      res.send(result);
+    })
+
+
+
 
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
