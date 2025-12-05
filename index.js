@@ -27,31 +27,50 @@ async function run() {
     await client.connect();
 
     const database = client.db('freelanceMarketplace');
-    const postService = database.collection('jobs');
+    const postJobs = database.collection('jobs');
 // post or save services from database
     app.post('/jobs', async(req,res)=>{
         const data = req.body;
         const date = new Date();
         data.CreatedAt = date;
         console.log(data);
-        const result = await postService.insertOne(data);
+        const result = await postJobs.insertOne(data);
         res.send(result);
     })
 
 // get or read services from database
     app.get('/jobs', async(req,res)=>{
-        const result = await postService.find().toArray();
+        const result = await postJobs.find().toArray();
         res.send(result);
     })
 
+
+// get single service using id
     app.get('/jobs/:id', async(req,res)=>{
         const id = req.params
         console.log(id);
         
         const query = {_id: new ObjectId(id)};
-        const result = await postService.findOne(query);
+        const result = await postJobs.findOne(query);
         res.send(result);
     })
+// get jobs added by specific user
+  app.get('/myAddedJobs', async(req,res)=>{
+    const {email} = req.query
+    console.log(email);
+    const query = {userEmail: email};
+    const result = await postJobs.find(query).toArray();
+    res.send(result);
+  })
+
+  app.put('/update/:id', async(req,res)=>{
+    const data = req.body;
+    const id = req.params
+    const query = {_id: new ObjectId(id)};
+
+    const updateJobs = {
+      $set: data
+  }})
 
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
