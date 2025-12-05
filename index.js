@@ -83,7 +83,7 @@ async function run() {
       res.send(result);
       console.error("Update error:", err);
     })
-
+// delete jobs
     app.delete('/delete/:id', async (req, res) => {
       const { id } = req.params;
       const query = { _id: new ObjectId(id) };
@@ -91,14 +91,22 @@ async function run() {
       res.send(result);
     })
 
-
+// accepted jobs api
     app.post('/acceptedJobs', async (req, res) => {
       const data = req.body;
       console.log(data);
       result = await acceptedJobsCollection.insertOne(data);
       res.send(result);
     })
-
+// get accepted jobs by user email
+    app.get('/acceptedJobs', async (req, res) => {
+      const { email } = req.query
+      console.log(email);
+      const query = { acceptedBy: email };
+      const result = await acceptedJobsCollection.find(query).toArray();
+      res.send(result);
+    });
+      
 
 
     await client.db("admin").command({ ping: 1 });
