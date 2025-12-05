@@ -40,14 +40,17 @@ async function run() {
 
     // get or read services from database
     app.get('/jobs', async (req, res) => {
-      const result = await freelanceMarketplace.find().toArray();
+      const category = (req.query.category || "").trim();
+
+      const query = category ? { category } : {};
+      const result = await freelanceMarketplace.find(query).toArray();
       res.send(result);
     })
 
 
     // get single service using id
     app.get('/jobs/:id', async (req, res) => {
-      const id = req.params
+      const { id } = req.params
       console.log(id);
 
       const query = { _id: new ObjectId(id) };
@@ -62,7 +65,7 @@ async function run() {
       const result = await freelanceMarketplace.find(query).toArray();
       res.send(result);
     })
-// update jobs
+    // update jobs
     app.put('/update/:id', async (req, res) => {
       const data = req.body;
       delete data._id;
