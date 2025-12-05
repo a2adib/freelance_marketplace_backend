@@ -107,7 +107,7 @@ async function run() {
       res.send(result);
     });
       
-app.delete('/delete/:id', async (req, res) => {
+app.delete('/remove/:id', async (req, res) => {
       const { id } = req.params;
       const query = { _id: new ObjectId(id) };
       const result = await acceptedJobsCollection.deleteOne(query);
