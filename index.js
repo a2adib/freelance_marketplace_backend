@@ -28,6 +28,8 @@ async function run() {
 
     const database = client.db('freelanceMarketplace');
     const freelanceMarketplace = database.collection('jobs');
+    const acceptedJobsCollection = database.collection('acceptedJobs');
+
     // post or save services from database
     app.post('/jobs', async (req, res) => {
       const data = req.body;
@@ -89,6 +91,13 @@ async function run() {
       res.send(result);
     })
 
+
+    app.post('/acceptedJobs', async (req, res) => {
+      const data = req.body;
+      console.log(data);
+      result = await acceptedJobsCollection.insertOne(data);
+      res.send(result);
+    })
 
 
 
